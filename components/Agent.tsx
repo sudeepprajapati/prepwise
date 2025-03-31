@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { vapi } from "@/lib/vapi.sdk";
 import { interviewer } from '@/constants';
 import { createdFeedback } from '@/lib/actions/general.action';
+import { getCurrentUser } from '@/lib/actions/auth.action';
 
 enum CallStatus {
     INACTIVE = "INACTIVE",
@@ -26,6 +27,8 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
     const [messages, setMessages] = useState<SavedMessage[]>([])
+    const [user, setUser] = useState<User | null>(null)
+
 
     useEffect(() => {
         const onCallStart = () => setCallStatus(CallStatus.ACTIVE);
@@ -84,6 +87,14 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
         }
     }, [messages, callStatus, type, userId])
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const userData = await getCurrentUser()
+            setUser(userData)
+        }
+        fetchUser()
+    }, [])
+
     const handleCall = async () => {
         setCallStatus(CallStatus.CONNECTING)
 
@@ -132,7 +143,12 @@ const Agent = ({ userName, userId, type, interviewId, questions }: AgentProps) =
                 </div>
                 <div className="card-border">
                     <div className="card-content">
-                        <Image src='/user-avatar.png' alt='user avatar' width={540} height={540} className='rounded-full object-cover size-[120px]' />
+                        <p
+                            className="w-32 h-32 size-[120px] rounded-full bg-gray-800 text-white flex items-center justify-center text-2xl font-semibold "
+                        >
+                            {user?.name.charAt(0).toUpperCase()}
+                        </p>
+                        {/* <Image src='/user-avatar.png' alt='user avatar' width={540} height={540} className='' /> */}
                         <h3>{userName}</h3>
                     </div>
                 </div>
