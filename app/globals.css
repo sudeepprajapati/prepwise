@@ -185,6 +185,10 @@
     @apply bg-dark-200 rounded-full min-h-12 px-5 cursor-pointer border border-input  overflow-hidden;
   }
 
+  .nav-links{
+    @apply w-full text-left px-4 py-2 transition duration-200 cursor-pointer hover:bg-gray-700;
+  }
+
   .card-border {
     @apply border-gradient p-0.5 rounded-2xl w-fit;
   }
