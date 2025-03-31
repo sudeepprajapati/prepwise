@@ -13,7 +13,7 @@ interface User {
 }
 
 const Navbar = () => {
-    const [showLogout, setShowLogout] = useState(false)
+    const [showPopup, setShowPopup] = useState(false)
     const [user, setUser] = useState<User | null>(null)
     const router = useRouter()
     const dropdownRef = useRef<HTMLDivElement>(null)
@@ -29,7 +29,7 @@ const Navbar = () => {
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setShowLogout(false)
+                setShowPopup(false)
             }
         }
 
@@ -59,17 +59,22 @@ const Navbar = () => {
             {user && (
                 <div className="relative" ref={dropdownRef}>
                     <button
-                        onClick={() => setShowLogout(!showLogout)}
-                        className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center text-lg font-semibold"
+                        onClick={() => setShowPopup(!showPopup)}
+                        className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center text-lg font-semibold cursor-pointer"
                     >
                         {user.name.charAt(0).toUpperCase()}
                     </button>
 
-                    {showLogout && (
-                        <div className="absolute right-0 mt-2 w-48 bg-dark-200 rounded-lg shadow-lg py-2 border">
+                    {showPopup && (
+                        <div className="absolute right-0 mt-2 w-44 bg-gray-800 bg-blur-2xl rounded-lg shadow-lg py-2 border border-gray-700">
+                            <p className='w-full text-left px-4 text-sm font-semibold'>{user?.name}</p>
+                            <div className='flex flex-col border-y border-gray-600 my-2' >
+                                <Link href='/about' className='nav-links'>About</Link>
+                                <Link href='/interview' className='nav-links'>New Interview</Link>
+                            </div>
                             <button
                                 onClick={handleLogout}
-                                className="w-full text-left px-4 py-2 hover:bg-dark-300"
+                                className="nav-links"
                             >
                                 Logout
                             </button>
