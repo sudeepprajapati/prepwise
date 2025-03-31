@@ -60,24 +60,25 @@ const Navbar = () => {
                 <div className="relative" ref={dropdownRef}>
                     <button
                         onClick={() => setShowPopup(!showPopup)}
-                        className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center text-lg font-semibold cursor-pointer"
+                        className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center  font-semibold cursor-pointer"
                     >
-                        {user.name.charAt(0).toUpperCase()}
+                        {user?.name.charAt(0).toUpperCase()}
                     </button>
 
                     {showPopup && (
-                        <div className="absolute right-0 mt-2 w-44 bg-gray-800 bg-blur-2xl rounded-lg shadow-lg py-2 border border-gray-700">
-                            <p className='w-full text-left px-4 text-sm font-semibold'>{user?.name}</p>
-                            <div className='flex flex-col border-y border-gray-600 my-2' >
-                                <Link href='/about' className='nav-links'>About</Link>
-                                <Link href='/interview' className='nav-links'>New Interview</Link>
+                        <div className="absolute right-0 mt-2 w-54 bg-gray-800 bg-blur-2xl rounded-xl shadow-lg py-3 border border-gray-700">
+                            <p className='w-full text-left px-4 text-sm text-gray-300 lowercase'>{user?.name}</p>
+                            <div className='border-b border-gray-600 my-2' />
+                            <div className='flex flex-col ' >
+                                <Link href='/about' className='nav-links '>About</Link>
+                                <Link href='/interview' className='nav-links '>New Interview</Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className="nav-links text-red-500 "
+                                >
+                                    Log Out
+                                </button>
                             </div>
-                            <button
-                                onClick={handleLogout}
-                                className="nav-links"
-                            >
-                                Logout
-                            </button>
                         </div>
                     )}
                 </div>

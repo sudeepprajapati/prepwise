@@ -186,7 +186,7 @@
   }
 
   .nav-links{
-    @apply w-full text-left px-4 py-2 transition duration-200 cursor-pointer hover:bg-gray-700;
+    @apply w-full text-left px-4 py-2 transition duration-200 cursor-pointer font-semibold hover:bg-gray-700;
   }
 
   .card-border {
