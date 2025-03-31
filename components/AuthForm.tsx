@@ -12,8 +12,8 @@ import { useRouter } from 'next/navigation';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase/client';
 import { signIn, signUp } from '@/lib/actions/auth.action';
-
-
+import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
 
 const authFormSchema = (type: FormType) => {
   return z.object({
@@ -36,10 +36,22 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      // Ensure password is treated as a secure string regardless of display state
+      const submissionValues = {
+        ...values,
+        password: values.password.toString() // Convert to string to ensure consistent handling
+      };
+
       if (type === 'sign-up') {
-        const { name, email, password } = values;
+        const { name, email, password } = submissionValues;
 
         const userCredentials = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -56,7 +68,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
         toast.success('Account created successfully. Please sign in.');
         router.push('/sign-in')
       } else {
-        const { email, password } = values;
+        const { email, password } = submissionValues;
 
         const userCredentials = await signInWithEmailAndPassword(auth, email, password)
 
@@ -113,17 +125,27 @@ const AuthForm = ({ type }: { type: FormType }) => {
               type="email"
             />
 
-            <FormField
-              control={form.control}
-              name="password"
-              label="Password"
-              placeholder="Enter Password"
-              type="password"
-            />
+            <div className="relative">
+              <FormField
+                control={form.control}
+                name="password"
+                label="Password"
+                placeholder="Enter Password"
+                type={showPassword ? "text" : "password"}
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-[38px] text-light-100/60 hover:text-light-100 cursor-pointer"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
+            </div>
 
-
-            {/* <p>Email</p>
-            <p>Password</p> */}
             <Button className='btn' type="submit">{isSignIn ? 'Sign in' : 'Create an Account'}</Button>
           </form>
           <p className='text-center'>
